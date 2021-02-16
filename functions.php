@@ -13,11 +13,13 @@
         function displayPlayers(array $players) : void
         {
             foreach ($players as $player) {
-                echo $player['name'] . ': [H: ' . $player['health'] . '] [S: ' . $player['strength'] . ']';
-                if (array_key_exists('magic', $player)) {
-                    echo '[M: ' . $player['magic'] . ']';
+                echo $player['name'] . PHP_EOL . 
+                'Classe : ' .$player['type']['classe'] .PHP_EOL.
+                'Stats :  [H: ' . $player['type']['health'] . '][S: ' . $player['type']['strength'] . ']';
+                if (array_key_exists('magic', $player['type'])) {
+                    echo '[M: ' . $player['type']['magic'] . ']';
                 }
-                echo  PHP_EOL;
+                echo  PHP_EOL .'Position : ['. $player['position']['x'] .';'. $player['position']['y'].']' . PHP_EOL . PHP_EOL;
             }
         }
         
@@ -38,7 +40,6 @@
                         echo '[' . $x . ',' .  $y . '] ';
                     }
                 }
-                echo PHP_EOL;
-                echo PHP_EOL;
+                echo PHP_EOL . PHP_EOL;
             }
         }
