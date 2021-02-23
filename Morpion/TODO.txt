@@ -1,0 +1,20 @@
+------------------------------------------------------------------
+Exercice POO "Morpion"
+2 joueurs
+Deux types de pions "X" et "O"
+Tableau de 3x3
+Chaque joueur joue à son tour
+[] [] []
+[] [] []
+[] [] []
+
+1. Réfléchir au diagramme UML et "aux classes"
+2. Afficher le plateau vide
+--------------------------------------------------------
+php morpion.php
+>> == Démarrage partie ==
+>> Joueur 1 à vous de jouer !
+>> ?    [Saisie utilisateur ; ex: (1,1)]
+>>
+>> Joueur 2 à vous de jouer !
+>> ?    [Saisie utilisateur ; ex: (2,1)]

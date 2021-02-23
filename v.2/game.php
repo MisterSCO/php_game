@@ -7,6 +7,24 @@
     define('SIZE_X', 10);
     define('SIZE_Y', 10);
 
+    define('TYPE_WARRIOR', [
+        'name' => 'Warrior',
+        'min_health' => 170,
+        'max_health' => 300,
+        'min_strength' => 70,
+        'max_strength' => 100,
+    ]);
+    define('TYPE_WIZARD', [
+        'name' => 'Wizard',
+        'min_health' => 100,
+        'max_health' => 200,
+        'min_strength' => 25,
+        'max_strength' => 50,
+        'min_magic' => 150,
+        'max_magic' => 250
+    ]);
+
+
 
 
     echo '============== Début du programme =============='.PHP_EOL;
@@ -28,54 +46,52 @@
 
     $hercule = [
         'name'     => 'Hercule',
-        'health'   => '100',
-        'strength' => '50'
+        'type' => TYPE_WARRIOR,
     ];
+
+    
 
     $merlin = [
         'name'     => 'Merlin',
-        'health'   => '80',
-        'strength' => '50',
-        'magic'    => '200'
+        'type' => TYPE_WIZARD,
     ];
+
+    
 
     $amaterasu = [
         'name'     => 'Amaterasu',
-        'health'   => '90',
-        'strength' => '40',
+        'type' => TYPE_WARRIOR,
     ];
+
+    
     
     $zeus = [
         'name'     => 'Zeus',
-        'health'   => '60',
-        'strength' => '20',
-        'magic'    => '230'
+        'type' => TYPE_WIZARD,
     ];
 
-    $sobek = [
-        'name'     => 'Sobek',
-        'health'   => '200',
-        'strength' => '10',
-        'magic'    => '20'
-    ];
 
+    
 
     $characters = [
         $hercule,
         $merlin,
         $amaterasu,
         $zeus,
-        $sobek
     ];
 
-    
+    foreach ($characters as &$character) {
+        buildStatsRef($character);
+    }
     
     
     //3. Positionner (aléatoirement) nos joueurs dans le plateau
     // ex: $board[0][0] = $merlin
 
+    unset ($character);
     foreach ($characters as $character) {
-        $board[rand(0, 4)][rand(0, 4)] = $character;
+        $board[$character['position']['y']][$character['position']['x']] = $character;
+        
     }
 
     //4. Afficher le plateau de jeu proprement
