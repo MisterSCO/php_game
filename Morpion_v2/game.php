@@ -1,9 +1,10 @@
 <?php
+
 error_reporting(E_ALL);
 ini_set('display_error', 1);
 
 include_once 'functions.php';
-include_once 'player.php';
+include_once 'model/player.php';
 
 const SIZE_X = 3;
 const SIZE_Y = 3;
@@ -18,22 +19,24 @@ $board = creatboard();
 // TODO : afficher le plateau de jeu vide
 // ...
 
-$players=array();
+$players=[];
 
 $player1 = new Player;
 $name1 = readline('CHOISIS UN PSEUDO MANAN!!!!! >>');
 $player1 -> setName($name1);
 $player1 -> setSymbol('O');
+
 echo PHP_EOL . $name1 . ' joue les ' . $player1->getSymbol() . PHP_EOL;
 
 $player2 = new Player;
-$name2 = readline('ET TOI AUSSI CHOISIS UN PSEUDO MANAN!!!!! >>');
+$name2 = readline('CHOISIS UN PSEUDO MANAN!!!!! >>');
 $player2->setName($name2);
 $player2->setSymbol('X');
+
 echo PHP_EOL . $name2 . ' joue les ' . $player2->getSymbol() . PHP_EOL;
 
 
-$players =['$player1','$player2'];
+$players =[$player1, $player2];
 
 
 displayBoard($board);
@@ -55,7 +58,7 @@ $players[] = 'X';
 do {
     foreach ($players as $player) {
         do {
-            echo $player -> getName() . ' à vous de jouer!' . PHP_EOL;
+            echo $player->getName() . ' à vous de jouer!' . PHP_EOL;
             $sResponse = readline('>> Quelle case? ');
             
             print_r($sResponse . PHP_EOL);
@@ -75,7 +78,7 @@ do {
             }
         } while ($unvalidate);
         
-        $board[$y][$x] = $player -> getSymbol();
+        $board[$y][$x] = $player->getSymbol();
         displayBoard($board);
 
         $bWin = isWin($board);

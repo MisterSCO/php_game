@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * creatboard
+ *
+ * @return array
+ */
 function creatboard() : array
 {
     $board = [];
@@ -13,6 +18,12 @@ function creatboard() : array
     return $board;
 }
 
+/**
+ * displayBoard
+ *
+ * @param  array $board
+ * @return void
+ */
 function displayBoard(array $board): void
 {
     for ($y = 0; $y < SIZE_Y; $y++) {
@@ -36,6 +47,12 @@ function isValidXY(int $x , int $y) : bool
     return($x >= 0 && $x < SIZE_X  && $y >= 0 && $y < SIZE_Y);
 }
 
+/**
+ * isWin
+ *
+ * @param  mixed $board
+ * @return bool
+ */
 function isWin(array $board) : bool
 {
     $bLine1 = !empty(trim($board[0][0])) && ($board[0][0] === $board [1][0] && $board[0][0] === $board[2][0] && $board[1][0] === $board[2][0]);
@@ -84,6 +101,16 @@ function isWin(array $board) : bool
     $bDiagRL = !empty(trim($board[2][0])) && ($board[2][0] === $board[1][1] && $board[2][0] === $board[0][2] && $board[1][1] === $board[0][2]);
     if ($bDiagRL) {
         echo 'Victoire de ' . $board[2][0];
+        return true;
+    }
+
+    $bfullArray = (!empty(trim($board[0][0])) && !empty(trim($board[0][1])) && !empty(trim($board[0][2]))
+        && !empty(trim($board[1][0])) && !empty(trim($board[1][1])) && !empty(trim($board[1][2]))
+        && !empty(trim($board[2][0])) && !empty(trim($board[2][1])) && !empty(trim($board[2][2])));
+
+    $bCaseNul = $bfullArray && !$bLine1 && !$bLine2 && !$bLine3 && !$bCol1 && !$bCol2 && !$bCol3 && !$bDiagLR && !$bDiagRL;
+    if ($bCaseNul) {
+        echo 'Match nul' . PHP_EOL;
         return true;
     }
     return false;
