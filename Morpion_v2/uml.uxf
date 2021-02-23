@@ -1,0 +1,33 @@
+<diagram program="umletino" version="14.4.0-SNAPSHOT"><zoom_level>10</zoom_level><element><id>UMLClass</id><coordinates><x>200</x><y>480</y><w>210</w><h>190</h></coordinates><panel_attributes>&lt;&lt;Player&gt;&gt;
+
+--
+- username : string
+- rank : int
+--
++ getUsername ( ) : string
++ getRank ( ) : int
+
++ setRank (int $iRank)  : void</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>200</x><y>50</y><w>210</w><h>190</h></coordinates><panel_attributes>&lt;&lt;Board&gt;&gt;
+
+--
+- board: array
+- players: Player[ ]
+--
++ play ( ) : void
+
++ getPlayers ( ) : array
++ addPlayer (Player $a) : void</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>600</x><y>490</y><w>210</w><h>190</h></coordinates><panel_attributes>&lt;&lt;Pawn&gt;&gt;
+
+--
+- symbol : string
+--
++ getSymbol ( ) : string</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>290</x><y>230</y><w>40</w><h>270</h></coordinates><panel_attributes>lt=-
+m1=*
+m2=1
+</panel_attributes><additional_attributes>10;250;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>400</x><y>530</y><w>220</w><h>50</h></coordinates><panel_attributes>lt=-
+m1=*
+m2=1
+</panel_attributes><additional_attributes>200;20;10;20</additional_attributes></element><element><id>UMLNote</id><coordinates><x>540</x><y>210</y><w>340</w><h>70</h></coordinates><panel_attributes>Le plateau de jeu va manipuler des pions via l'attribut
+"board"
+mais ce n'est pas une liaison explicite au sens UML
+bg=blue</panel_attributes><additional_attributes></additional_attributes></element></diagram>
