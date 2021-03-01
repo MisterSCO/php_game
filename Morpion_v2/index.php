@@ -4,42 +4,36 @@ error_reporting(E_ALL);
 ini_set('display_error', 1);
 
 include_once 'functions.php';
-include_once 'model/player.php';
+include_once 'models/Player.php';
+include_once 'models/Game.php';
 
-const SIZE_X = 3;
-const SIZE_Y = 3;
+
+
+const MAX_PLAYERS = 2;
 
 echo '';
 
 // TODO : créer un plateau de jeu 3x3
 // ...
-
-$board = creatboard();
+$oGame = new Game();
 
 // TODO : afficher le plateau de jeu vide
 // ...
 
 $players=[];
+$aPawns = ['X','O'];
 
-$player1 = new Player;
-$name1 = readline('CHOISIS UN PSEUDO MANAN!!!!! >>');
-$player1 -> setName($name1);
-$player1 -> setSymbol('O');
+foreach ($aPawns as $sPawn) {
+    $name = readline('CHOISIS UN PSEUDO MANAN!!!!! >>');
+    $
 
-echo PHP_EOL . $name1 . ' joue les ' . $player1->getSymbol() . PHP_EOL;
+    $players[] = new Player($name,$sPawn);
+    
+    PHP_EOL;
 
-$player2 = new Player;
-$name2 = readline('CHOISIS UN PSEUDO MANAN!!!!! >>');
-$player2->setName($name2);
-$player2->setSymbol('X');
+}
 
-echo PHP_EOL . $name2 . ' joue les ' . $player2->getSymbol() . PHP_EOL;
-
-
-$players =[$player1, $player2];
-
-
-displayBoard($board);
+$oGame->displayBoard();
 
 
 // TODO : créer un tableau de joueurs
@@ -55,6 +49,7 @@ $players[] = 'X';
  */
 // TODO : effectuer un tour de jeu
 // ...
+$bWin = true;
 do {
     foreach ($players as $player) {
         do {
@@ -70,16 +65,18 @@ do {
             echo 'X : '.$x . PHP_EOL;
             echo 'Y : '.$y . PHP_EOL;
 
-            $unvalidate = (!isValidXY($x, $y)) || (!empty(trim($board[$y][$x])));
+            $bReplay = (!$oGame->isValidXY($x, $y)) || (!empty(trim($oGame->getBoard[$y][$x])));
             
-            if ($unvalidate)
+            if ($bReplay)
             {
                 echo 'Cette case n\'est pas valide, merci de reproposer des coordonnées' . PHP_EOL;
             }
-        } while ($unvalidate);
+        } while ($bReplay);
         
+        $board=$oGame->getBoard();
         $board[$y][$x] = $player->getSymbol();
-        displayBoard($board);
+        $oGame->setBoard($board);
+        $oGame->displayBoard();
 
         $bWin = isWin($board);
         if ($bWin) {

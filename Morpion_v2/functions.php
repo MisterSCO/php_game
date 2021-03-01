@@ -1,39 +1,8 @@
 <?php
 
-/**
- * creatboard
- *
- * @return array
- */
-function creatboard() : array
-{
-    $board = [];
 
-    for ($y = 0; $y < SIZE_Y; $y++) {
-        $board[$y] = [];
-        for ($x = 0; $x < SIZE_X; $x++) {
-            $board[$y][$x] = '';
-        }
-    }
-    return $board;
-}
 
-/**
- * displayBoard
- *
- * @param  array $board
- * @return void
- */
-function displayBoard(array $board): void
-{
-    for ($y = 0; $y < SIZE_Y; $y++) {
-        for ($x = 0; $x < SIZE_X; $x++) {
-            echo '[ '. $board[$y][$x] . ' ] ';
-        }
-        echo PHP_EOL;
-        echo PHP_EOL;
-    }
-}
+
 
 /**
  * isValidXY

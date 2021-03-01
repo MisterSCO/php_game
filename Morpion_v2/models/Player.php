@@ -24,9 +24,10 @@ class Player
         return $this->name;
     }
 
-    public function construct(string $sName = 'Player')
+    public function construct(string $name, string $sSymbol)
     {
-        $this->name = $sName;
+        $this->name = $name;
+        $this->symbol = $sSymbol;
     }
 
     /*
