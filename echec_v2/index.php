@@ -1,4 +1,5 @@
 <?php
+// Affichage des erreurs PHP (à ne pas faire en production)
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
@@ -11,37 +12,21 @@ spl_autoload_register(function ($sNamespaceClass) {
   $sConvertedClass = str_replace('\\', '/', $sNamespaceClass);
   include_once($sConvertedClass.'.php');
 });
-//include_once 'model/Player.php';
-//include_once 'model/MorpionGame.php';
 
 include_once 'functions.php';
 
 // Permet d'utiliser "MorpionGame" directement au lieu de "Model\MorpionGame"
+
 use Entity\Player;
 use Model\ChessGame;
-use Model\MorpionGame;
 
 echo '== Début du programme =='.PHP_EOL;
 
-// 0. Ouvrir une connexion PDO
-try {
-  $oPDO = new \PDO(
-    'mysql:host=localhost;dbname=poo',
-    'root',
-    ''
-  );
-} catch (\Exception $e) {
-  echo $e->getMessage() . PHP_EOL;
-  die;
-}
-print_r($oPDO);
-
-
 echo '= Leaderboard =' . PHP_EOL;
-foreach (Player::loadAll() as $oPlayer) {
-  echo sprintf('[%d] %s', $oPlayer->getScore(), $oPlayer->getname()).PHP_EOL;
+foreach(Player::loadAll() as $oPlayer) {
+  echo sprintf('[%d] %s', $oPlayer->getScore(), $oPlayer->getName()). PHP_EOL;
 }
-echo '= \Leaderboard =' . PHP_EOL;
+echo '= /Leaderboard =' . PHP_EOL;
 
 
 // 1. Créer un plateau de jeu
@@ -55,21 +40,29 @@ $oGame->displayBoard();
 foreach (ChessGame::TEAMS as $sTeam) {
     $sName = readline('Pseudo ? ');
 
-    // TODO : Récupérer le joueur en BDD si possible sinon créer le joueur
-    $oPlayer = Player::getByName($sName);
+    // Récupérer le joueur en BDD si possible, sinon créer le joueur
+    // Solution 1 - Non optimisée
+    /*$oPlayer = Player::getByName( $sName );
+    if ($oPlayer instanceof Player) {
+      $oPlayer->setTeam($sTeam);
+      $oGame->addPlayer($oPlayer);
+    } else {
+      $oGame->addPlayer(new Entity\Player($sName, $sTeam));
+    }*/
 
+    // Solution 2 - Optimisée (on essaye de raisonner en "action corrective")
+    $oPlayer = Player::getByName( $sName );
     if (!$oPlayer instanceof Player) {
+      // Action corrective : on construit un Player si celui-ci n'existe pas
       $oPlayer = new Entity\Player($sName, $sTeam);
     }
-    
-  $oPlayer->setTeam($sTeam);
-  $oGame->addPlayer($oPlayer);
+    // Uniquement dans le cas d'un setter "fluent" (=> return $this)
+    $oGame->addPlayer($oPlayer->setTeam($sTeam));
 }
 
 // 4. Effectuer un "tour de jeu"
 do {
   echo '== Nouveau tour de jeu =='.PHP_EOL;
-  readline('STOP');
 } while ($oGame->playRound());
 
 echo '== Fin du programme =='.PHP_EOL;

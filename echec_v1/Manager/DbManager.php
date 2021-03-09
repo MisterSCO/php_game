@@ -11,6 +11,7 @@ class DbManager
             
             try {
                 static::$pdo = new \PDO('mysql:host=localhost;dbname=poo','root','');
+                static::$pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
             } catch (\Exception $e) {
                 echo $e->getMessage().PHP_EOL;
                 die;
