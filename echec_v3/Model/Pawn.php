@@ -5,6 +5,8 @@ namespace Model;
 
 class Pawn 
 {
+    use Positionable;
+
     /**@var string */
     protected const SYMBOL = '';
 
@@ -13,6 +15,8 @@ class Pawn
 
     /** @var Player */
     protected \Entity\Player $player;
+
+    
 
     public function __construct()
     {
@@ -67,4 +71,6 @@ class Pawn
 
         return $this;
     }
+
+    
 }

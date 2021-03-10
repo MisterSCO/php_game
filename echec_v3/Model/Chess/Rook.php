@@ -4,5 +4,5 @@ namespace Model\Chess;
 final class Rook extends \Model\Pawn 
 {
     /**@var string */
-    protected const SYMBOL = 'R';
+    protected const SYMBOL = '&#9814;';
 }

@@ -24,6 +24,9 @@ abstract class AbstractGame
     /** @var array */
     protected $players = [];
 
+    /** @var \Entity\Player|null */
+    protected ?\Entity\Player $currentPlayer = null;
+
     /**
      * __construct est appellée automatiquement lors de l'instanciation de l'objet (= new)
      */
@@ -61,7 +64,7 @@ abstract class AbstractGame
      *
      * @param  int $x
      * @param  int $y
-     * @param  Player $oPlayer
+     * @param  Pawn $oPawn
      * @return void
      */
     protected function setXY(int $x, int $y, Pawn $oPawn) : void
@@ -70,8 +73,39 @@ abstract class AbstractGame
     }
 
     protected abstract function playerAction (\Entity\Player $oPlayer) : void;
+    protected abstract function selectCell(int $x, int $y): array;
     protected abstract function isWin () : bool;
     
+    
+    /**
+     * nextPlayer
+     *
+     * @return void
+     */
+    protected function nextPlayer() : void 
+    {
+        // $this->players       = tableau de joueurs
+        // $this->currentPlayer = joueur actuel
+
+        //in_array ($value , $array) : bool
+        // array_search ($value,$array) : int (= index) ou FALSE
+
+        $iIdxPlayer = array_search($this->currentPlayer, $this->players);
+        if ($iIdxPlayer !== false) {
+            $iIdxPlayer++;
+            $iNbPlayers = count($this->players);
+
+            // Solution 1 
+            /* if ($iIdxPlayer >= $iNbPlayers) {
+                $iIdxPlayer = 0;
+            } */
+
+            // Solution 2 (% = reste de la division (ex : 9%2 = 1))
+            
+            $this->currentPlayer = $this->players[$iIdxPlayer%$iNbPlayers];
+        }
+    }
+
     /**
      * @return bool
      */
@@ -187,5 +221,25 @@ abstract class AbstractGame
     public function addPlayer(\Entity\Player $player) : void
     {
         $this->players[] = $player;
+    }
+
+    /**
+     * Get the value of currentPlayer
+     */ 
+    public function getCurrentPlayer()
+    {
+        return $this->currentPlayer;
+    }
+
+    /**
+     * Set the value of currentPlayer
+     *
+     * @return  self
+     */ 
+    public function setCurrentPlayer($currentPlayer)
+    {
+        $this->currentPlayer = $currentPlayer;
+
+        return $this;
     }
 }

@@ -18,6 +18,8 @@ final class ChessGame extends AbstractGame
     protected const SIZE_X = 8;
     protected const SIZE_Y = 8;
 
+    protected ?Pawn $selectedPawn = null;
+
     public function __construct()
     {
         parent::__construct();
@@ -35,9 +37,15 @@ final class ChessGame extends AbstractGame
             list($x, $y) = explode(',', readline('Quel pion ? '));
 
             // TEST : case non vide? et coordonnées valides ?
-            $bReplay = !$this->isValidXY($x, $y) || $this->isEmptyXY($x, $y);
+            $bReplay = 
+                !$this->isValidXY($x, $y) 
+                || $this->isEmptyXY($x, $y) 
+                || ($this->board[$y][$x]->getPlayer() !== $oPlayer
+            );
+
+
             if ($bReplay) {
-                echo 'Case vide OU coordonnées invalides'.PHP_EOL;
+                echo 'Case vide, les coordonnées sont invalides ou vous essayer de jouer les pions adverse'.PHP_EOL;
             }
         } while ($bReplay);
 
@@ -60,6 +68,63 @@ final class ChessGame extends AbstractGame
         // 3. On l'efface dans $x, $y
         $this->board[$y][$x] = ' ';
     }
+    
+    /**
+     * selectCell
+     *
+     * @param  int $x
+     * @param  int $y
+     * @return bool
+     */
+    public function selectCell(int $x, int $y): array
+    {
+
+        $aData = [
+            'selected_pawn'  => $this->selectedPawn,
+            'current_player' => $this->currentPlayer,
+            'is_win'         => $this->isWin(),
+            'move'           => [],
+
+        ];
+        // Coordonnées invalides, on sort
+        if (!$this->isValidXY($x, $y)) {
+            return $aData;
+        }
+
+        // Est-ce que je séléctionne un pion?
+        $oPawn = $this->board[$y][$x];
+        if ($oPawn instanceof Pawn) {
+            if ($oPawn->getPlayer() === $this->currentPlayer) {
+                $this->selectedPawn = $oPawn;
+                $aData['selected_pawn'] = $this->selectedPawn;
+
+                return $aData;
+            }
+        }
+
+        // Est-ce que je déplace un pion?
+        if ($this->selectedPawn && !($oPawn instanceof Pawn)) {
+            
+            // Mémoriser la case de départ
+            $aPosInit = $this->selectedPawn->getPosition();
+
+            // Déplacerle pion
+            $this->setXY($x, $y, $this->selectedPawn);
+            $this->selectedPawn->setPosition($x, $y);
+
+            // Effacer l'ancien pion
+            $this->board[$aPosInit['y']][$aPosInit['x']] = ' ';
+            $this->selectedPawn = null;
+
+            // Joueur suivant
+            $this->nextPlayer();
+
+            return $aData;
+        }
+
+        return $aData;
+    }
+
 
     protected function isWin () : bool 
     {
@@ -72,25 +137,28 @@ final class ChessGame extends AbstractGame
     {
         // Others pawns
         $a = [
-            0 => $this->players[0],
-            7 => $this->players[1],
+            0 => $this->players[1],
+            7 => $this->players[0],
         ];
         foreach ($a as $i => $oPlayer) {
-            $this->board[$i][0] = (new Chess\Rook())->setPlayer( $oPlayer );
-            $this->board[$i][1] = (new Chess\Knight())->setPlayer( $oPlayer );
-            $this->board[$i][2] = (new Chess\Bishop())->setPlayer( $oPlayer );
-            $this->board[$i][3] = (new Chess\Queen())->setPlayer( $oPlayer );
-            $this->board[$i][4] = (new Chess\King())->setPlayer( $oPlayer );
-            $this->board[$i][5] = (new Chess\Bishop())->setPlayer( $oPlayer );
-            $this->board[$i][6] = (new Chess\Knight())->setPlayer( $oPlayer );
-            $this->board[$i][self::SIZE_X-1] = (new Chess\Rook())->setPlayer( $oPlayer ); 
+            $this->board[$i][0]              = (new Chess\Rook())   ->setPlayer( $oPlayer )->setPosition( 0, $i);
+            $this->board[$i][1]              = (new Chess\Knight()) ->setPlayer( $oPlayer )->setPosition( 1, $i);
+            $this->board[$i][2]              = (new Chess\Bishop()) ->setPlayer( $oPlayer )->setPosition( 2, $i);
+            $this->board[$i][3]              = (new Chess\Queen())  ->setPlayer( $oPlayer )->setPosition( 3, $i);
+            $this->board[$i][4]              = (new Chess\King())   ->setPlayer( $oPlayer )->setPosition( 4, $i);
+            $this->board[$i][5]              = (new Chess\Bishop()) ->setPlayer( $oPlayer )->setPosition( 5, $i);
+            $this->board[$i][6]              = (new Chess\Knight()) ->setPlayer( $oPlayer )->setPosition( 6, $i);
+            $this->board[$i][self::SIZE_X-1] = (new Chess\Rook())   ->setPlayer( $oPlayer )->setPosition( 7, $i);
         }
 
         // Peons
         for ($i = 0 ; $i < self::SIZE_X ; $i++) {
-            $this->board[1][$i] = (new Chess\Peon())->setPlayer( $this->players[0] );
-            $this->board[6][$i] = (new Chess\Peon())->setPlayer( $this->players[1] );
+            $this->board[1][$i] = (new Chess\Peon())->setPlayer( $this->players[1] )->setPosition($i , 1);
+            $this->board[6][$i] = (new Chess\Peon())->setPlayer( $this->players[0] )->setPosition($i , 6);
         }
+
+        // On défini le premier joueur
+        $this->currentPlayer = $this->players[0];
     }
 
     /**

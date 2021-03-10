@@ -1,0 +1,26 @@
+.cell {
+    height: 100px;
+    width: 100px;
+    font-size: 4rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.cell:hover{
+    background-color: yellow !important;
+}
+
+div:nth-child(even) > .cell:nth-child(even),
+div:nth-child(odd)>.cell:nth-child(odd) {
+    background-color: rgb(115, 180, 182);
+}
+div:nth-child(even) >.cell:nth-child(odd),
+div:nth-child(odd)>.cell:nth-child(even) {
+    background-color: rgb(134, 66, 21);
+}
+
+.selected{
+    color: blueviolet !important;
+}
+
+

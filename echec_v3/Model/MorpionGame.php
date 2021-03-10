@@ -46,6 +46,18 @@ final class MorpionGame extends AbstractGame
     }
     
     /**
+     * selectCell
+     *
+     * @param  int $x
+     * @param  int $y
+     * @return bool
+     */
+    protected function selectCell(int $x, int $y): array
+    {
+        return [];
+    }
+    
+    /**
      * /!\ Rappel : $board[y][x] /!\
      * @return bool
      */
