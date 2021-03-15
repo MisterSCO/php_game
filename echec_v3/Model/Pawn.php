@@ -17,12 +17,18 @@ class Pawn
     protected \Entity\Player $player;
 
     
+    
 
     public function __construct()
     {
         $this->symbol = static::SYMBOL;
     }
         
+    public function getMoves() : array
+    {
+        return [];
+    }
+
     /**
      * @return string
      */

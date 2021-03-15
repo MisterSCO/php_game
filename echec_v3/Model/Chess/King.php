@@ -5,4 +5,10 @@ final class King extends \Model\Pawn
 {
     /**@var string */
     protected const SYMBOL = '&#9812;';
+    
+    public function getMoves(): array
+    {
+
+        return [];
+    }
 }

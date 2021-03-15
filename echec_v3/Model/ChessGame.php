@@ -83,7 +83,7 @@ final class ChessGame extends AbstractGame
             'selected_pawn'  => $this->selectedPawn,
             'current_player' => $this->currentPlayer,
             'is_win'         => $this->isWin(),
-            'move'           => [],
+            'moves'           => [],
 
         ];
         // Coordonnées invalides, on sort
@@ -96,7 +96,10 @@ final class ChessGame extends AbstractGame
         if ($oPawn instanceof Pawn) {
             if ($oPawn->getPlayer() === $this->currentPlayer) {
                 $this->selectedPawn = $oPawn;
+                // On actualise le tableau des données à retourner
                 $aData['selected_pawn'] = $this->selectedPawn;
+
+                $aData['moves'] = $oPawn->getMoves();
 
                 return $aData;
             }
@@ -108,17 +111,21 @@ final class ChessGame extends AbstractGame
             // Mémoriser la case de départ
             $aPosInit = $this->selectedPawn->getPosition();
 
+
             // Déplacerle pion
             $this->setXY($x, $y, $this->selectedPawn);
             $this->selectedPawn->setPosition($x, $y);
+
 
             // Effacer l'ancien pion
             $this->board[$aPosInit['y']][$aPosInit['x']] = ' ';
             $this->selectedPawn = null;
 
+            
             // Joueur suivant
             $this->nextPlayer();
-
+            // On actualise le tableau des données à retourner
+            $aData['current_player'] = $this->currentPlayer;
             return $aData;
         }
 

@@ -6,6 +6,10 @@
     cursor: pointer;
 }
 
+.cell-selected {
+    background-color: rgb(0, 255, 0) !important;
+}
+
 .cell:hover{
     background-color: yellow !important;
 }

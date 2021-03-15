@@ -36,6 +36,7 @@ if (isset($_GET['new'])) {
 
     // On enregistre le jeu en session
     $_SESSION['game'] = serialize($oGame);
+    header('Location: index.php');
 }
 
 $aGameInfo = [];
@@ -45,7 +46,12 @@ if ($oGame){
         // 2. Action sur le plateau de jeu
         $aGameInfo = $oGame->selectCell($_GET['x'], $_GET['y']);
     }
+    else {
+        $aGameInfo = $oGame->selectCell(-1, -1);
+    }
 
+    /* var_dump($aGameInfo);
+    echo $aGameInfo['current_player']; */
     // On enregistre le jeu en session
     $_SESSION['game'] = serialize($oGame);
 
@@ -78,6 +84,7 @@ if ($oGame){
 
     <a href="?new" class="btn btn-primary my-3">Nouvelle partie</a>
 
+    
 
     <div class="container">
         <?php if ($oGame) : ?>
