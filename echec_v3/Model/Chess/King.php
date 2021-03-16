@@ -9,15 +9,20 @@ final class King extends \Model\Pawn
     public function getMoves(): array
     {
 
-        return [
-            [$this->getX(), $this->getY() - 1],
-            [$this->getX(), $this->getY() + 1],
-            [$this->getX() + 1, $this->getY()],
-            [$this->getX() - 1, $this->getY()],
-            [$this->getX() - 1, $this->getY() - 1],
-            [$this->getX() - 1, $this->getY() + 1],
-            [$this->getX() + 1, $this->getY() + 1],
-            [$this->getX() + 1, $this->getY() - 1],
-        ];
+        $aMoves = [];
+
+        // Horizontal et vertical
+        $aMoves[] = [$this->x, $this->y - 1];
+        $aMoves[] = [$this->x, $this->y + 1];
+        $aMoves[] = [$this->x + 1, $this->y];
+        $aMoves[] = [$this->x - 1, $this->y];
+
+        // Diag
+        $aMoves[] = [$this->x - 1, $this->y - 1];
+        $aMoves[] = [$this->x - 1, $this->y + 1];
+        $aMoves[] = [$this->x + 1, $this->y + 1];
+        $aMoves[] = [$this->x + 1, $this->y - 1];
+
+        return  $aMoves;
     }
 }

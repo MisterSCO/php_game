@@ -69,6 +69,58 @@ final class ChessGame extends AbstractGame
         $this->board[$y][$x] = ' ';
     }
     
+
+        
+    /**
+     * getValidMoves
+     *
+     * @return array
+     */
+    private function getValidMoves(Pawn $oPawn) : array
+    {
+        $aValidMoves = [];
+
+        // Récupérer les positions "envisagées" par le pion
+        $aMoves = $oPawn->getMoves();
+
+        // Pour chacune, tester si la position est valide (=libre)
+        if (is_int($aMoves[0][0])) {
+            foreach ($aMoves as $aCoords) {
+                if(!$this->isValidXY($aCoords[0], $aCoords[1]) || (!$this->isEmptyXY($aCoords[0], $aCoords[1])) && $this->getXY($aCoords[0], $aCoords[1])->getPlayer() === $oPawn->getPlayer()) {
+                    continue;
+                }
+                $aValidMoves[] = $aCoords;
+
+                if (
+                    !$this->isEmptyXY($aCoords[0], $aCoords[1])
+                    && ($this->getXY($aCoords[0], $aCoords[1])->getPlayer() !== $oPawn->getPlayer())
+                ) {
+                    break;
+                }
+            }
+        }
+        else {
+            foreach ($aMoves as $aDirections) {
+                foreach ($aDirections as $aCoords) {
+                    if (!$this->isValidXY($aCoords[0], $aCoords[1]) || (!$this->isEmptyXY($aCoords[0], $aCoords[1])) && $this->getXY($aCoords[0], $aCoords[1])->getPlayer() === $oPawn->getPlayer()) {
+                        break;
+                    }
+                    $aValidMoves[] = $aCoords;
+
+                    if (
+                        !$this->isEmptyXY($aCoords[0], $aCoords[1])
+                        && ($this->getXY($aCoords[0], $aCoords[1])->getPlayer() !== $oPawn->getPlayer())
+                    ) {
+                        break;
+                    }
+                }
+            }
+        }
+        // Retourner la positions valides        
+        return $aValidMoves;
+    }
+
+    
     /**
      * selectCell
      *
@@ -99,20 +151,23 @@ final class ChessGame extends AbstractGame
                 // On actualise le tableau des données à retourner
                 $aData['selected_pawn'] = $this->selectedPawn;
 
-                $aData['moves'] = $oPawn->getMoves();
+                //$aData['moves'] = $oPawn->getMoves();
+
+                $aData['moves'] = $this->getValidMoves($this->selectedPawn);
+                
 
                 return $aData;
             }
         }
 
         // Est-ce que je déplace un pion?
-        if ($this->selectedPawn && !($oPawn instanceof Pawn)) {
+        if ($this->selectedPawn && (in_array([$x, $y], $this->getValidMoves($this ->selectedPawn))) ) {
             
             // Mémoriser la case de départ
             $aPosInit = $this->selectedPawn->getPosition();
 
 
-            // Déplacerle pion
+            // Déplacer le pion
             $this->setXY($x, $y, $this->selectedPawn);
             $this->selectedPawn->setPosition($x, $y);
 

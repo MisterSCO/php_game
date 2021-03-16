@@ -8,7 +8,7 @@ if (isset($aGameInfo['current_player'])) {
 <div class="row justify-content-center">
     <div class="col-auto">&nbsp;&nbsp;&nbsp;&nbsp;</div>
     <?php for ($i = 0; $i < 8; $i++) {
-        echo '<div class="col-auto border" style="width: 100px;"> ' . $aLetters[$i] . '<br> [' . $i . ']</div>';
+        echo '<div class="col-auto border" style="width: 75px;"> ' . $aLetters[$i] . '<br> [' . $i . ']</div>';
     } ?>
 
 </div>

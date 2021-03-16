@@ -59,6 +59,12 @@ abstract class AbstractGame
         return empty(trim($this->board[$y][$x]));
     }
 
+    protected function getXY(int $x, int $y)
+    {
+        return $this->board[$y][$x];
+    }
+
+
     /**
      * Vérifie si les coordonnées $x, $y sont valides
      *

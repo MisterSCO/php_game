@@ -17,7 +17,6 @@ class Pawn
     protected \Entity\Player $player;
 
     
-    
 
     public function __construct()
     {
