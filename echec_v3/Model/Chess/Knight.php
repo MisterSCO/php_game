@@ -9,6 +9,16 @@ final class Knight extends \Model\Pawn
     public function getMoves(): array
     {
 
-        return [];
+        return [
+            [$this->getX() + 1, $this->getY() - 2],
+            [$this->getX() - 1, $this->getY() - 2],
+            [$this->getX() - 1, $this->getY() + 2],
+            [$this->getX() + 1, $this->getY() + 2],
+
+            [$this->getX() + 2, $this->getY() - 1],
+            [$this->getX() - 2, $this->getY() - 1],
+            [$this->getX() - 2, $this->getY() + 1],
+            [$this->getX() + 2, $this->getY() + 1],
+        ];
     }
 }

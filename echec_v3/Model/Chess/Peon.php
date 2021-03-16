@@ -12,8 +12,11 @@ final class Peon extends \Model\Pawn
 
     public function getMoves(): array
     {
-        
-        return [[$this->getX(), $this->getY()-1], [$this->getX(), $this->getY() - 2]];
+
+        return [
+            [$this->getX(), $this->getY() - 1],
+            [$this->getX(), $this->getY() - 2]
+        ];
         
     }
 }

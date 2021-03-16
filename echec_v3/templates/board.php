@@ -2,7 +2,7 @@
 if (isset($aGameInfo['current_player'])) {
     echo '<strong>A toi de jouer, ' . $aGameInfo['current_player'] . '!!!</strong>';
 }
-var_dump($aGameInfo);
+
 ?>
 <?php $aLetters = range('A', 'Z');  ?>
 <div class="row justify-content-center">
