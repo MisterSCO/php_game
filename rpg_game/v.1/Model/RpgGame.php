@@ -84,10 +84,11 @@ final class RpgGame extends AbstractGame
             // Effacer l'ancien pion
             $this->board[$aPosInit['y']][$aPosInit['x']] = ' ';
 
+            $this->moveMonsters();
+            
             // Optention des déplacements valids ré-actualisés
             $aData['moves'] = $this->getValidMoves($oCharacter);
             
-            $this->moveMonsters();
 
             return $aData;
         }
@@ -118,9 +119,12 @@ final class RpgGame extends AbstractGame
 
     public function moveMonsters(): void
     {
+        var_dump($this->monsters);
         foreach ($this->monsters as $monster) {
             $aMoves=$this->getValidMoves($monster);
+            
             $aMove = $aMoves[array_rand($aMoves)];
+            //var_dump($aMove[0]);
             $aPosInit = $monster->getPosition();
 
             // Déplacer le pion

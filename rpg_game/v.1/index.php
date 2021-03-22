@@ -67,6 +67,7 @@ if ($oGame) {
     }
 }
 
+
 ?>
 
 <!doctype html>
