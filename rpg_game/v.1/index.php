@@ -66,6 +66,7 @@ if ($oGame) {
         exit();
     }
 }
+
 ?>
 
 <!doctype html>
@@ -106,25 +107,52 @@ if ($oGame) {
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script>
-
         function onKeyUp(event) {
-            console.log(event.keyCode)
+
+            // On récupère le joueur
+            let hero = document.querySelector('.pawn');
+            //console.log(hero);
+
+            // On récupère l'ancetre le plus proche du joueur qui est une div
+            let div = hero.closest("div");
+            //console.log(div);
+
+            let x = div.getAttribute('data-x');
+            let y = div.getAttribute('data-y');
+
+
+            // On récupère le code des flèches
+            //console.log(event.keyCode)
             switch (event.keyCode) {
-                case '38':
-                    
-                    break;
-
-                case '40':
-
-                    break;
-
-                case '37':
+                case 37: // Gauche
+                    x--;
+                    //console.log(x)
+                    // Je recupère ma div qui a la class .cell et je lui donne la nouvelle valeur de x
 
                     break;
 
-                case '39':
+                case 38: // Haut
+                    y--;
 
                     break;
+
+                case 39: // Droite
+
+                    x++;
+
+                    break;
+
+                case 40: // Bas
+                    y++;
+
+
+                    break;
+            }
+            div = document.querySelector('.cell[data-x="' + x + '"].cell[data-y="' + y + '"]');
+
+            if (div) {
+                div.click();
+
             }
         }
 
@@ -139,8 +167,8 @@ if ($oGame) {
             // window.location = '?x=' + x + '&y=' + y;
 
             $.get('index.php?x=' + x + '&y=' + y, function(data, status) {
-                console.log(status);
-                console.log(data);
+                //console.log(status);
+                //console.log(data);
 
                 /* let board = document.getElementById('board');
                 board.innerHTML = data; */

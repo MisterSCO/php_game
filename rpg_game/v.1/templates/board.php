@@ -10,7 +10,7 @@ foreach ($oGame->getBoard() as $iY => $aLineY) : ?>
                 <?php
                 if ($mColX instanceof \Model\Pawn) {
                     $bSelected = false;
-                    echo '<span class="' . ($bSelected ? 'selected' : '') . '">';
+                    echo '<span class="pawn">';
                 }
 
                 echo $mColX;

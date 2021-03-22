@@ -65,7 +65,7 @@ abstract class AbstractGame
      * @param  Pawn $oPawn
      * @return void
      */
-    protected function setXY(int $x, int $y, Pawn $oPawn) : void
+    protected function setXY(int $x, int $y, $oPawn) : void
     {
         $this->board[$y][$x] = $oPawn;
     }

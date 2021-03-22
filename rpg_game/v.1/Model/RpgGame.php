@@ -11,12 +11,17 @@ namespace Model;
  */
 final class RpgGame extends AbstractGame
 {
+    
     // On précise les équipes
     public const TEAMS = ['White', 'Black'];
 
     // On précise les dimensions
     protected const SIZE_X = 25;
     protected const SIZE_Y = 25;
+
+    /** @var array */
+    protected array $monsters;
+
 
     public function __construct()
     {
@@ -45,13 +50,13 @@ final class RpgGame extends AbstractGame
      *
      * @param  int $x
      * @param  int $y
-     * @return bool
+     * @return array
      */
     public function selectCell(\Entity\Player $oPlayer, int $x, int $y): array
     {
 
         $aData = [
-            'moves'           => [],
+            'moves' => [],
         ];
         // Coordonnées invalides, on sort
         if (!$this->isValidXY($x, $y)) {
@@ -81,22 +86,52 @@ final class RpgGame extends AbstractGame
 
             // Optention des déplacements valids ré-actualisés
             $aData['moves'] = $this->getValidMoves($oCharacter);
+            
+            $this->moveMonsters();
 
             return $aData;
         }
+
         return $aData;
     }
 
+    
 
     public function fillBoard() : void
     {
-        /* for ($i = 0; $i < 200; $i++) {
+        for ($i = 0; $i < 10; $i++) {
+            
             $oMob = new Mob();
-
+            
+            
             [$iX, $iY] = [rand(0, self::SIZE_X - 1), rand(0, self::SIZE_Y - 1)];
-            $this->setXY($iX, $iY, $oMob);
+
             $oMob->setPosition($iX, $iY);
-        } */
+
+            $this->setXY($iX, $iY, $oMob);
+
+            $this->monsters[] = $oMob;
+        }
+        
+    }
+
+
+    public function moveMonsters(): void
+    {
+        foreach ($this->monsters as $monster) {
+            $aMoves=$this->getValidMoves($monster);
+            $aMove = $aMoves[array_rand($aMoves)];
+            $aPosInit = $monster->getPosition();
+
+            // Déplacer le pion
+            $this->setXY($aMove[0], $aMove[1], $monster);
+            $monster->setPosition($aMove[0], $aMove[1]);
+
+
+            // Effacer l'ancien pion
+            $this->board[$aPosInit['y']][$aPosInit['x']] = ' ';
+            
+        }
     }
 
     /**
@@ -104,7 +139,7 @@ final class RpgGame extends AbstractGame
      *
      * @return array
      */
-    private function getValidMoves(Pawn $oPawn)
+    private function getValidMoves($oPawn)
     {
         $aValidMoves = [];
 
@@ -121,8 +156,7 @@ final class RpgGame extends AbstractGame
                 // Condition de sortie : case invalide ou non vide
                 if (
                     !$this->isValidXY($aCoords[0], $aCoords[1])
-                    || (!$this->isEmptyXY($aCoords[0], $aCoords[1])
-                        && $this->getXY($aCoords[0], $aCoords[1])->getPlayer() === $oPawn->getPlayer())
+                    || (!$this->isEmptyXY($aCoords[0], $aCoords[1]))
                 ) {
                     // On arrête le traitement de cette valeur = on passe à la valeur suivante
                     continue;
@@ -141,8 +175,7 @@ final class RpgGame extends AbstractGame
                     // Condition de sortie : case invalide ou non vide
                     if (
                         !$this->isValidXY($aCoords[0], $aCoords[1])
-                        || (!$this->isEmptyXY($aCoords[0], $aCoords[1])
-                            && $this->getXY($aCoords[0], $aCoords[1])->getPlayer() === $oPawn->getPlayer())
+                        || (!$this->isEmptyXY($aCoords[0], $aCoords[1]))
                     ) {
                         // On arrête le traitement de cette direction
                         break;
@@ -164,5 +197,25 @@ final class RpgGame extends AbstractGame
 
         // Retourner les positions valides
         return $aValidMoves;
+    }
+
+    /**
+     * Get the value of monster
+     */ 
+    public function getMonster()
+    {
+        return $this->monster;
+    }
+
+    /**
+     * Set the value of monster
+     *
+     * @return  self
+     */ 
+    public function setMonster($monster)
+    {
+        $this->monster = $monster;
+
+        return $this;
     }
 }
