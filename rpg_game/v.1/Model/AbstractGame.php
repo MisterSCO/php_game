@@ -62,12 +62,12 @@ abstract class AbstractGame
      *
      * @param  int $x
      * @param  int $y
-     * @param  Pawn $oPawn
+     * @param  $mObject
      * @return void
      */
-    protected function setXY(int $x, int $y, $oPawn) : void
+    protected function setXY(int $x, int $y, $mObject) : void
     {
-        $this->board[$y][$x] = $oPawn;
+        $this->board[$y][$x] = $mObject;
     }
 
     protected abstract function selectCell(\Entity\Player $oPlayer, int $x, int $y): array;

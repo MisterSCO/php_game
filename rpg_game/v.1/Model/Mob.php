@@ -5,6 +5,9 @@ class Mob
 {
     use Positionable;
 
+
+    public const NB_MONSTERS = 10;
+
     /**@var string */
     protected const SYMBOL = '🧟';
 
