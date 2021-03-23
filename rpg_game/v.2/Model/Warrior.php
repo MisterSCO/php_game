@@ -9,10 +9,11 @@ final class Warrior extends Character
     /**@var string */
     protected const SYMBOL = '&#128119;';
 
-    function __construct($sName = 'Guerrier')
+    function __construct(string $sName = 'Guerrier')
     {
         parent::__construct($sName);
 
-        $this->health = rand(30, 100);
+        $this->MaxHealth = 100;
+        $this->health = rand(30, $this->MaxHealth);
     }
 }
