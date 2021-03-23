@@ -69,18 +69,7 @@ final class RpgGame extends AbstractGame
         if (in_array([$x, $y], $aData['moves'])) {
             // Déplacement du Personnage
             // TODO : A optimiser dans une fonction (idem Monster)
-            // -- Mémoriser la case de départ
-            $aPosInit = $oCharacter->getPosition();
-
-            // -- Déplacer le pion
-            $this->setXY($x, $y, $oCharacter);
-            $oCharacter->setPosition($x, $y);
-                        
-            // -- Effacer l'ancienne case
-            $this->board[ $aPosInit[ 'y' ] ][ $aPosInit[ 'x' ] ] = ' ';
-
-            // Déplacement des monstres
-            $this->moveMonsters();
+            $this->moveXY($x, $y, $oCharacter);
 
             // Obtention des déplacements valides ré-actualisés
             $aData['moves'] = $this->getValidMoves($oCharacter);
@@ -89,6 +78,11 @@ final class RpgGame extends AbstractGame
         }
 
         return $aData;
+    }
+
+    public function lifetime() : void
+    {
+        $this->moveMonsters();
     }
 
     public function fillBoard() : void
@@ -120,18 +114,13 @@ final class RpgGame extends AbstractGame
             $x = $aCoords[0];
             $y = $aCoords[1];
 
-            // Déplacer le monstre
-            // -- Mémoriser la case de départ
-            $aPosInit = $oMonster->getPosition();
 
-            // -- Déplacer le pion
-            $this->setXY($x, $y, $oMonster);
-            $oMonster->setPosition($x, $y);
-                        
-            // -- Effacer l'ancienne case
-            $this->board[ $aPosInit[ 'y' ] ][ $aPosInit[ 'x' ] ] = ' ';
+            //
+            $this->moveXY($x, $y, $oMonster);
         }
     }
+    
+    
         
     /**
      * @param Pawn $oPawn

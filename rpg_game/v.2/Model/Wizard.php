@@ -6,6 +6,7 @@ namespace Model;
  */
 final class Wizard extends Character
 {
+
     /**@var string */
     protected const SYMBOL = '&#129497;';
 

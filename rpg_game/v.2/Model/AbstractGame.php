@@ -96,6 +96,31 @@ abstract class AbstractGame
         $this->board = $board;
     }
 
+
+    /**
+     * moveXY
+     *
+     * @param  int $x
+     * @param  int $y
+     * @param  mixed $mObject
+     * @return void
+     */
+    protected function moveXY(
+        int $x,
+        int $y,
+        $mObject
+    ) {
+        // -- Mémoriser la case de départ
+        $aPosInit = $mObject->getPosition();
+
+        // -- Déplacer le pion
+        $this->setXY($x, $y, $mObject);
+        $mObject->setPosition($x, $y);
+
+        // -- Effacer l'ancienne case
+        $this->board[$aPosInit['y']][$aPosInit['x']] = ' ';
+    }
+
     /**
      * Get the value of board
      */ 

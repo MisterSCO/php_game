@@ -18,3 +18,8 @@
     background-color: rgba(60, 255, 0, 0.685) !important;
     opacity: .5;
 }
+
+.card-abso {
+    position: absolute;
+    min-width: 12em;
+}

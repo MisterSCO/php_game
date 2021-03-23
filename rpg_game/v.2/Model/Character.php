@@ -10,7 +10,10 @@ abstract class Character extends Pawn
 {
     /** @var string */
     protected string $name;
-    
+
+    /** @var int */
+    protected int $MaxHealth;
+
     /** @var int */
     protected int $health;
 
@@ -99,6 +102,26 @@ abstract class Character extends Pawn
     public function setStrength($strength)
     {
         $this->strength = $strength;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of MaxHealth
+     */ 
+    public function getMaxHealth()
+    {
+        return $this->MaxHealth;
+    }
+
+    /**
+     * Set the value of MaxHealth
+     *
+     * @return  self
+     */ 
+    public function setMaxHealth($MaxHealth)
+    {
+        $this->MaxHealth = $MaxHealth;
 
         return $this;
     }
