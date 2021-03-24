@@ -119,6 +119,7 @@ abstract class AbstractGame
 
         // -- Effacer l'ancienne case
         $this->board[$aPosInit['y']][$aPosInit['x']] = ' ';
+        
     }
 
     /**

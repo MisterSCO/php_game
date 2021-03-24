@@ -13,4 +13,5 @@ ini_set('display_errors', 1);
 spl_autoload_register(function ($sNamespaceClass) {
 $sConvertedClass = str_replace('\\', '/', $sNamespaceClass);
 include_once($sConvertedClass . '.php');
+include_once('functions.php');
 });

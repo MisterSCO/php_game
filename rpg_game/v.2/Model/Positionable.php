@@ -2,12 +2,12 @@
 namespace Model;
 
 trait Positionable
- {
+{
     /** @var int */
-    protected int $x;
+    protected int $x = 0;
 
     /** @var int */
-    protected int $y;
+    protected int $y = 0;
 
     /**
      * Get the value of x and y

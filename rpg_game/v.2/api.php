@@ -10,7 +10,7 @@ $oPlayer = isset($_SESSION['player']) ? unserialize($_SESSION['player']) : null;
 // Création d'une partie
 if (isset($_GET['new'])) {
     $oPlayer = new Entity\Player('MisterSCO');
-    $oCharacter = new Model\Warrior('Aragorn');
+    $oCharacter = new Model\Wizard('Merlin');
 
     // Liaisons Player-Character / Character-Player
     $oPlayer->setCharacter($oCharacter);

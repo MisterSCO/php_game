@@ -1,6 +1,7 @@
 <?php
 // Gestion (et démarrage) des sessions PHP
 session_start();
+//session_destroy();
 
 
 use Model\RpgGame;

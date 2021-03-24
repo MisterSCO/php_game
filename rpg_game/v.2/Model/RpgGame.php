@@ -67,12 +67,17 @@ final class RpgGame extends AbstractGame
 
         // Déplacement autorisé ?
         if (in_array([$x, $y], $aData['moves'])) {
+            if ($oCharacter->getHealth() > 0) {
+                $this->moveXY($x, $y, $oCharacter);
+                $oCharacter->setHealth($oCharacter->getHealth() -1 );
+            }
             // Déplacement du Personnage
             // TODO : A optimiser dans une fonction (idem Monster)
-            $this->moveXY($x, $y, $oCharacter);
+            
 
             // Obtention des déplacements valides ré-actualisés
             $aData['moves'] = $this->getValidMoves($oCharacter);
+
 
             return $aData;
         }
@@ -87,15 +92,37 @@ final class RpgGame extends AbstractGame
 
     public function fillBoard() : void
     {
-        for($i = 0 ; $i < Monster::NB_MONSTERS ; $i++) {
-            $oMonster = new Monster();
+        
+        for($i = 0 ; $i < Spider::NB_MONSTERS ; $i++) {
+            $oSpider = new Spider();
 
             [$iX, $iY] = [rand(0, self::SIZE_X - 1), rand(0, self::SIZE_Y - 1)];
-            $this->setXY($iX, $iY, $oMonster);
-            $oMonster->setPosition($iX, $iY);
+            $this->setXY($iX, $iY, $oSpider);
+            $oSpider->setPosition($iX, $iY);
+            
 
             // On mémorise le monstre pour les récupérer plus tard
-            $this->monsters[] = $oMonster;
+            $this->monsters[] = $oSpider;
+        }
+        for ($i = 0; $i < SpiderQueen::NB_MONSTERS; $i++) {
+            $oSpiderQueen = new SpiderQueen();
+
+            [$iX, $iY] = [rand(0, self::SIZE_X - 1), rand(0, self::SIZE_Y - 1)];
+            $this->setXY($iX, $iY, $oSpiderQueen);
+            $oSpiderQueen->setPosition($iX, $iY);
+
+            // On mémorise le monstre pour les récupérer plus tard
+            $this->monsters[] = $oSpiderQueen;
+        }
+        for ($i = 0; $i < Dragon::NB_MONSTERS; $i++) {
+            $oDragon = new Dragon();
+
+            [$iX, $iY] = [rand(0, self::SIZE_X - 1), rand(0, self::SIZE_Y - 1)];
+            $this->setXY($iX, $iY, $oDragon);
+            $oDragon->setPosition($iX, $iY);
+
+            // On mémorise le monstre pour les récupérer plus tard
+            $this->monsters[] = $oDragon;
         }
     }
     
@@ -110,13 +137,16 @@ final class RpgGame extends AbstractGame
             $aMoves = $this->getValidMoves($oMonster);
 
             // Choisir un déplacement de manière aléatoire
-            $aCoords = $aMoves[ array_rand($aMoves) ];
-            $x = $aCoords[0];
-            $y = $aCoords[1];
+            if ($aMoves) {
+                $aCoords = $aMoves[array_rand($aMoves)];
 
+                $x = $aCoords[0];
+                $y = $aCoords[1];
 
-            //
-            $this->moveXY($x, $y, $oMonster);
+                //
+                $this->moveXY($x, $y, $oMonster);
+            }
+            
         }
     }
     
@@ -179,5 +209,25 @@ final class RpgGame extends AbstractGame
 
         // Retourner les positions valides
         return $aValidMoves;
+    }
+
+    /**
+     * Get the value of monsters
+     */ 
+    public function getMonsters()
+    {
+        return $this->monsters;
+    }
+
+    /**
+     * Set the value of monsters
+     *
+     * @return  self
+     */ 
+    public function setMonsters($monsters)
+    {
+        $this->monsters = $monsters;
+
+        return $this;
     }
 }

@@ -1,14 +1,21 @@
 <?php
 namespace Model;
 
-abstract class Monster
+final class Dragon extends Monster
 {
     use Positionable;
 
+    /**@const int */
+    public const NB_MONSTERS = 1;
+
+    /**@const int */
+    public const MAX_HEALTH = 200;
+
+    /**@const string */
+    protected const SYMBOL = '🐉';
 
     /** @var int */
     protected int $health;
-
 
     /** @var int */
     protected int $strength;
@@ -18,13 +25,18 @@ abstract class Monster
      */
     public function __construct()
     {
-        
+        $this->health = self::MAX_HEALTH;
+        $this->strength = 50;
+    }
+    
+    /**
+     * @return string
+     */
+    public function __toString() : string
+    {
+        return self::SYMBOL;
     }
 
-    public function getMoves(): array
-    {
-        return [];
-    }
 
     /**
      * Get the value of health

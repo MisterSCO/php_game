@@ -5,7 +5,8 @@ $oGame = isset($_SESSION['game']) ? unserialize($_SESSION['game']) : null;
 // On récupère le joueur en session (si existant)
 $oPlayer = isset($_SESSION['player']) ? unserialize($_SESSION['player']) : null;
 
-var_dump($oPlayer);
+var_dump($oGame->getMonsters());
+
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -51,7 +52,9 @@ var_dump($oPlayer);
 
         $(document).ready(function() {
             $(document).on('keydown', function(e) {
-                e.preventDefault();
+                if ([32,37,38,39,40].includes(e.keyCode)) {
+                    e.preventDefault();
+                }
             });
 
             $(document).on('keyup', function(e) {
@@ -105,7 +108,7 @@ var_dump($oPlayer);
 
                 refreshBoard('refresh');
 
-            }, 3000);
+            }, 300000);
 
             $('#NewGame').on('click', function() {
                 // AJAX - Requête GET (permet de mettre à jour une partie de la page)

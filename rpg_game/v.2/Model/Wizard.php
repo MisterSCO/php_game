@@ -24,6 +24,22 @@ final class Wizard extends Character
      * Conventions de code : camelCase
      */
     private $magic;
+    
+    private $MaxMagic;
+
+
+    function __construct(string $sName = 'Guerrier')
+    {
+        parent::__construct($sName);
+
+        $this->health = rand(50, 80);
+        $this->MaxHealth = $this->health ;
+        $this->strength = rand(5, 10);
+        $this->magic =  rand(100, 250);
+        $this->MaxMagic =  $this->magic;
+        
+    }
+
 
     /**
      * Lancement d'un sort d'attaque "Fireball"
@@ -87,6 +103,26 @@ final class Wizard extends Character
     public function setMagic($magic)
     {
         $this->magic = $magic;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of MaxMagic
+     */ 
+    public function getMaxMagic()
+    {
+        return $this->MaxMagic;
+    }
+
+    /**
+     * Set the value of MaxMagic
+     *
+     * @return  self
+     */ 
+    public function setMaxMagic($MaxMagic)
+    {
+        $this->MaxMagic = $MaxMagic;
 
         return $this;
     }

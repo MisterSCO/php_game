@@ -13,7 +13,8 @@ final class Warrior extends Character
     {
         parent::__construct($sName);
 
-        $this->MaxHealth = 100;
-        $this->health = rand(30, $this->MaxHealth);
+        $this->health = rand(80, 150);
+        $this->MaxHealth = $this->health;
+        $this->strength = rand(10, 20);
     }
 }
