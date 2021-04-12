@@ -5,7 +5,7 @@ include('_bootstrap.php');
 // On récupère le jeu en session (si existant)
 $oGame = isset($_SESSION['game']) ? unserialize($_SESSION['game']) : null;
 // On récupère le joueur en session (si existant)
-$oPlayer = isset($_SESSION['player']) ? unserialize($_SESSION['player']) : null;
+$oPlayer = $oGame ? $oGame->getPlayers()[0] : null;
 
 // Création d'une partie
 if (isset($_GET['new'])) {
@@ -44,6 +44,11 @@ if (isset($_GET['x']) && isset($_GET['y'])) {
 // Action spécial : refresh automatique
 if (isset($_GET['refresh'])) {
     $oGame->lifetime();
+}
+
+//action spéciale : attack un enemi quand on appuie sur espace
+if (isset($_GET['attack'])) {
+    $oGame->getValidAttack($oPlayer->getCharacter());
 }
 
 // On enregistre le jeu "modifié" en session

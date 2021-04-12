@@ -8,12 +8,15 @@ namespace Model;
  */
 abstract class Character extends Pawn
 {
+    /**@var string */
+    public const NAME = 'Personnage';
+
     /** @var string */
     protected string $name;
 
     /** @var int */
-    protected int $MaxHealth;
-
+    protected int $maxHealth;
+    
     /** @var int */
     protected int $health;
 
@@ -34,8 +37,19 @@ abstract class Character extends Pawn
 
     public function getMoves(): array
     {
+        return [];
+    }
+
+    public function getAttacks(): array
+    {
         $aMoves = [];
-        
+
+        // Diag
+        $aMoves[] = [$this->x - 1, $this->y - 1];
+        $aMoves[] = [$this->x - 1, $this->y + 1];
+        $aMoves[] = [$this->x + 1, $this->y - 1];
+        $aMoves[] = [$this->x + 1, $this->y + 1];
+
         // Carré
         $aMoves[] = [$this->x + 1, $this->y];
         $aMoves[] = [$this->x - 1, $this->y];
@@ -50,20 +64,21 @@ abstract class Character extends Pawn
         if ($this->isDead()) {
             return false;
         }
+
         $oMonster->setHealth($oMonster->getHealth() - $this->strength);
+        
         // Riposte du monstre
         $this->health -= $oMonster->getRetaliation();
     }
-
+    
+    /**
+     * @return bool
+     */
     public function isDead(): bool
     {
         return $this->health <= 0;
     }
-
-    function getMoveAttack(): array
-    {
-        return [];
-    }
+    
     /**
      * Get /*
      */
@@ -125,21 +140,21 @@ abstract class Character extends Pawn
     }
 
     /**
-     * Get the value of MaxHealth
+     * Get the value of maxHealth
      */ 
     public function getMaxHealth()
     {
-        return $this->MaxHealth;
+        return $this->maxHealth;
     }
 
     /**
-     * Set the value of MaxHealth
+     * Set the value of maxHealth
      *
      * @return  self
      */ 
-    public function setMaxHealth($MaxHealth)
+    public function setMaxHealth($maxHealth)
     {
-        $this->MaxHealth = $MaxHealth;
+        $this->maxHealth = $maxHealth;
 
         return $this;
     }

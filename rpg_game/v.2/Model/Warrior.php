@@ -17,4 +17,20 @@ final class Warrior extends Character
         $this->MaxHealth = $this->health;
         $this->strength = rand(10, 20);
     }
+
+    function getMoveAttack(): array
+    {
+        $aAttack = [];
+
+        $aAttack[] = [$this->x, $this->y + 1];
+        $aAttack[] = [$this->x + 1, $this->y + 1];
+        $aAttack[] = [$this->x + 1, $this->y];
+        $aAttack[] = [$this->x + 1, $this->y - 1];
+        $aAttack[] = [$this->x, $this->y - 1];
+        $aAttack[] = [$this->x - 1, $this->y - 1];
+        $aAttack[] = [$this->x - 1, $this->y];
+        $aAttack[] = [$this->x - 1, $this->y + 1];
+
+        return $aAttack;
+    }
 }

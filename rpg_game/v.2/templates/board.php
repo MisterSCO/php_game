@@ -43,14 +43,13 @@ foreach ($oGame->getBoard() as $iY => $aLineY) : ?>
                 <?php
 
                 if ($mColX instanceof \Model\Pawn) {
-                    echo '<span class="pawn '. getColorClass($pourcentCharac) .'">';
-                }
-
-                
-
-                if ($mColX instanceof \Model\Monster) {
-                    $pourcentMonsters = ($oGame->getMonsters()->getHealth() / $oGame->getMonsters()::MAXHEALTH) * 100;
-                    echo '<span class="monster ' . getColorClass($pourcentMonsters) . ' ">';
+                    echo '<span class="pawn ' . getColorClass($pourcentCharac) . '">';
+                } elseif ($mColX instanceof \Model\Spider) {
+                    echo '<span class="monster spider ' . getColorClass(($mColX->getHealth() / Model\Spider::MAX_HEALTH) * 100) . ' ">';
+                } elseif ($mColX instanceof \Model\SpiderQueen) {
+                    echo '<span class="monster spiderqueen ' . getColorClass(($mColX->getHealth() / Model\SpiderQueen::MAX_HEALTH) * 100) . ' ">';
+                } elseif ($mColX instanceof \Model\Dragon) {
+                    echo '<span class="monster dragon ' . getColorClass(($mColX->getHealth() / Model\Dragon::MAX_HEALTH) * 100) . ' ">';
                 }
 
                 echo $mColX . '</span>';

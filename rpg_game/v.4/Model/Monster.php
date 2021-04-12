@@ -5,38 +5,67 @@ abstract class Monster
 {
     use Positionable;
 
+    /**@var int */
+    public const NB_MONSTERS = null;
+
+    /**@var int */
+    public const MAX_HEALTH = null;
+
+    /**@var string */
+    public const NAME = 'Monstre';
+
+    /**@var string */
+    protected const SYMBOL = 'M';
 
     /** @var int */
     protected int $health;
-
 
     /** @var int */
     protected int $strength;
     
     /**
-     * @return void
+     * @return string
      */
-    public function __construct()
+    public function __toString() : string
     {
-        
+        return static::SYMBOL;
     }
-
-    public function getRetaliation() : int
+    
+    /**
+     * @return int
+     */
+    public function getRetaliation(): int
     {
         if ($this->isDead()) {
             return 0;
         }
-        return (rand(0,1)) ? $this->strength : 0;
+        return (rand(0, 1) ? $this->strength : 0);
     }
 
+    /**
+     * @return bool
+     */
     public function isDead(): bool
     {
-        return $this->health <= 0;
+        return ($this->health <= 0);
     }
-
+    
+    /**
+     * @return array
+     */
     public function getMoves(): array
     {
         return [];
+    }
+
+    public function getAttackCells(): array
+    {
+        return $this->getMoves();
+    }
+
+    public function hit(Character $oCharacter)
+    {
+        $oCharacter->setHealth($oCharacter->getHealth() - $this->strength);
     }
 
     /**

@@ -41,12 +41,17 @@ final class RpgGame extends AbstractGame
         //$this->board[$iRandY][$iRandX] = $oPlayer->getCharacter();
     }
 
+    public function lifetime(): void
+    {
+        $this->moveMonsters();
+    }
+
     /**
      * @param Player $oPlayer
      * @param int $x
      * @param int $y
      *
-     * @return bool
+     * @return array
      */
     public function selectCell(\Entity\Player $oPlayer, int $x, int $y): array
     {
@@ -69,15 +74,11 @@ final class RpgGame extends AbstractGame
         if (in_array([$x, $y], $aData['moves'])) {
             if (!$oCharacter->isDead()) {
                 $this->moveXY($x, $y, $oCharacter);
-                $oCharacter->setHealth($oCharacter->getHealth() -1 ); 
+                $oCharacter->setHealth($oCharacter->getHealth() - 1);
             }
-            // Déplacement du Personnage
-            // TODO : A optimiser dans une fonction (idem Monster)
-            
 
             // Obtention des déplacements valides ré-actualisés
             $aData['moves'] = $this->getValidMoves($oCharacter);
-
 
             return $aData;
         }
@@ -85,60 +86,61 @@ final class RpgGame extends AbstractGame
         return $aData;
     }
 
-    public function lifetime() : void
+    /**
+     * @param Player $oPlayer
+     * @param int $x
+     * @param int $y
+     *
+     * @return bool
+     */
+    public function attack(\Entity\Player $oPlayer): bool
     {
-        $this->moveMonsters();
-    }
-
-    public function getValidAttack($oPlayer)
-    {
-        $aValidAttack = $oPlayer->getMoveAttack();
-        foreach ($aValidAttack as $aCoords) {
-
-            if (!$this->isValidXY($aCoords[0], $aCoords[1]) || $this->isEmptyXY($aCoords[0], $aCoords[1])) {
+        // On récupère le "pion" du joueur
+        $oCharacter = $oPlayer->getCharacter();
+        
+        // Obtention de la zone d'attaque
+        $aCoords = $oCharacter->getAttacks();
+        foreach ($aCoords as $aCoord) {
+            if (!$this->isValidXY($aCoord[0], $aCoord[1]) || $this->isEmptyXY($aCoord[0], $aCoord[1])) {
                 continue;
             }
-            $oMonster = $this->getXY($aCoords[0], $aCoords[1]);
+
+            $oMonster = $this->getXY($aCoord[0], $aCoord[1]);
             if ($oMonster instanceof Monster) {
-                $oPlayer->hit($oMonster);
+                $oCharacter->hit($oMonster);
             }
         }
-    }
 
+        return true;
+    }
 
     public function fillBoard() : void
     {
-        
-        for($i = 0 ; $i < Spider::NB_MONSTERS ; $i++) {
-            $oSpider = new Spider();
+        for ($i = 0 ; $i < Spider::NB_MONSTERS ; $i++) {
+            $oMonster = new Spider();
 
-            [$iX, $iY] = [rand(0, self::SIZE_X - 1), rand(0, self::SIZE_Y - 1)];
-            $this->setXY($iX, $iY, $oSpider);
-            $oSpider->setPosition($iX, $iY);
-            
+            $this->moveXY(rand(0, self::SIZE_X - 1), rand(0, self::SIZE_Y - 1), $oMonster);
 
             // On mémorise le monstre pour les récupérer plus tard
-            $this->monsters[] = $oSpider;
+            $this->monsters[] = $oMonster;
         }
-        for ($i = 0; $i < SpiderQueen::NB_MONSTERS; $i++) {
-            $oSpiderQueen = new SpiderQueen();
 
-            [$iX, $iY] = [rand(0, self::SIZE_X - 1), rand(0, self::SIZE_Y - 1)];
-            $this->setXY($iX, $iY, $oSpiderQueen);
-            $oSpiderQueen->setPosition($iX, $iY);
+        for ($i = 0 ; $i < SpiderQueen::NB_MONSTERS ; $i++) {
+            $oMonster = new SpiderQueen();
+
+            $this->moveXY(rand(0, self::SIZE_X - 1), rand(0, self::SIZE_Y - 1), $oMonster);
 
             // On mémorise le monstre pour les récupérer plus tard
-            $this->monsters[] = $oSpiderQueen;
+            $this->monsters[] = $oMonster;
         }
-        for ($i = 0; $i < Dragon::NB_MONSTERS; $i++) {
-            $oDragon = new Dragon();
 
-            [$iX, $iY] = [rand(0, self::SIZE_X - 1), rand(0, self::SIZE_Y - 1)];
-            $this->setXY($iX, $iY, $oDragon);
-            $oDragon->setPosition($iX, $iY);
+        for ($i = 0 ; $i < Dragon::NB_MONSTERS ; $i++) {
+            $oMonster = new Dragon();
+
+            $this->moveXY(rand(0, self::SIZE_X - 1), rand(0, self::SIZE_Y - 1), $oMonster);
 
             // On mémorise le monstre pour les récupérer plus tard
-            $this->monsters[] = $oDragon;
+            $this->monsters[] = $oMonster;
         }
     }
     
@@ -148,26 +150,38 @@ final class RpgGame extends AbstractGame
     private function moveMonsters() : void
     {
         // Pour chaque monstre
-        foreach ($this->monsters as $oMonster) {
+        foreach ($this->monsters as $iIdx => $oMonster) {
+            if ($oMonster->isDead()) {
+                unset($this->monsters[$iIdx]);
+                continue;
+            }
+
             // Obtenir les déplacements possibles/voulus et valides
             $aMoves = $this->getValidMoves($oMonster);
-
-            // Choisir un déplacement de manière aléatoire
-
-            if ($aMoves && !$oMonster->isDead()) {
-                $aCoords = $aMoves[array_rand($aMoves)];
-
+            if ($aMoves) {
+                // Choisir un déplacement de manière aléatoire
+                $aCoords = $aMoves[ array_rand($aMoves) ];
                 $x = $aCoords[0];
                 $y = $aCoords[1];
-
-                //
+    
+                // Déplacer le monstre
                 $this->moveXY($x, $y, $oMonster);
             }
             
+            // Obtention de la zone d'attaque
+            $aCells = $oMonster->getAttackCells();
+            foreach ($aCells as $aCell) {
+                if (!$this->isValidXY($aCell[0], $aCell[1]) || $this->isEmptyXY($aCell[0], $aCell[1])) {
+                    continue;
+                }
+
+                $oCharacter = $this->getXY($aCell[0], $aCell[1]);
+                if ($oCharacter instanceof Character) {
+                    $oMonster->hit($oCharacter);
+                }
+            }
         }
     }
-    
-    
         
     /**
      * @param Pawn $oPawn
@@ -226,25 +240,5 @@ final class RpgGame extends AbstractGame
 
         // Retourner les positions valides
         return $aValidMoves;
-    }
-
-    /**
-     * Get the value of monsters
-     */ 
-    public function getMonsters()
-    {
-        return $this->monsters;
-    }
-
-    /**
-     * Set the value of monsters
-     *
-     * @return  self
-     */ 
-    public function setMonsters($monsters)
-    {
-        $this->monsters = $monsters;
-
-        return $this;
     }
 }

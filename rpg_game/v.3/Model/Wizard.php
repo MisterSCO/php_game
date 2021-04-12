@@ -6,9 +6,20 @@ namespace Model;
  */
 final class Wizard extends Character
 {
+    /**@var string */
+    public const NAME = 'Magicien';
 
     /**@var string */
-    protected const SYMBOL = '&#129497;';
+    public const SYMBOL = '&#129497;';
+
+    /**@var int */
+    public const MAX_HEALTH = 80;
+
+    /**@var int */
+    public const MAX_STRENGTH = 10;
+
+    /**@var int */
+    public const MAX_MAGIC = 250;
 
     // Constantes de classes (accessibles via Wizard::XXX ou self:XXX au sein de la classe)
     // public = accessible en dehors de la classe
@@ -19,59 +30,24 @@ final class Wizard extends Character
     private const HEAL_DAMAGE = 50;
     private const HEAL_COST = 50;
 
-    /*
-     * Propriétés/Attributs
-     * Conventions de code : camelCase
-     */
+    /** @var int */
+    private int $maxMagic;
+
+    /** @var int */
     private $magic;
-    
-    private $MaxMagic;
 
-
-    function __construct(string $sName = 'Guerrier')
+    /**
+     * @param string $sName
+     *
+     * @return void
+     */
+    public function __construct(string $sName)
     {
         parent::__construct($sName);
 
-        $this->health = rand(50, 80);
-        $this->MaxHealth = $this->health ;
-        $this->strength = rand(5, 10);
-        $this->magic =  rand(100, 250);
-        $this->MaxMagic =  $this->magic;
-        
-    }
-
-    function getMoveAttack(): array
-    {
-        $aAttack = [];
-
-        $aAttack[] = [$this->x, $this->y + 1];
-        $aAttack[] = [$this->x + 1, $this->y + 1];
-        $aAttack[] = [$this->x + 1, $this->y];
-        $aAttack[] = [$this->x + 1, $this->y - 1];
-        $aAttack[] = [$this->x, $this->y - 1];
-        $aAttack[] = [$this->x - 1, $this->y - 1];
-        $aAttack[] = [$this->x - 1, $this->y];
-        $aAttack[] = [$this->x - 1, $this->y + 1];
-        
-        $aAttack[] = [$this->x, $this->y + 2];
-        $aAttack[] = [$this->x + 2, $this->y + 2];
-        $aAttack[] = [$this->x + 2, $this->y];
-        $aAttack[] = [$this->x + 2, $this->y - 2];
-        $aAttack[] = [$this->x, $this->y - 2];
-        $aAttack[] = [$this->x - 2, $this->y - 2];
-        $aAttack[] = [$this->x - 2, $this->y];
-        $aAttack[] = [$this->x - 2, $this->y + 2];
-        
-        $aAttack[] = [$this->x, $this->y + 3];
-        $aAttack[] = [$this->x + 3, $this->y + 3];
-        $aAttack[] = [$this->x + 3, $this->y];
-        $aAttack[] = [$this->x + 3, $this->y - 3];
-        $aAttack[] = [$this->x, $this->y - 3];
-        $aAttack[] = [$this->x - 3, $this->y - 3];
-        $aAttack[] = [$this->x - 3, $this->y];
-        $aAttack[] = [$this->x - 3, $this->y + 3];  
-
-        return $aAttack;
+        $this->health = $this->maxHealth = rand(50, self::MAX_HEALTH);
+        $this->strength = rand(5, self::MAX_STRENGTH);
+        $this->magic = $this->maxMagic = rand(100, self::MAX_MAGIC);
     }
 
     /**
@@ -141,22 +117,78 @@ final class Wizard extends Character
     }
 
     /**
-     * Get the value of MaxMagic
+     * Get the value of maxMagic
      */ 
     public function getMaxMagic()
     {
-        return $this->MaxMagic;
+        return $this->maxMagic;
     }
 
     /**
-     * Set the value of MaxMagic
+     * Set the value of maxMagic
      *
      * @return  self
      */ 
-    public function setMaxMagic($MaxMagic)
+    public function setMaxMagic($maxMagic)
     {
-        $this->MaxMagic = $MaxMagic;
+        $this->maxMagic = $maxMagic;
 
         return $this;
+    }
+
+    public function getMoves(): array
+    {
+        $aMoves = [];
+        
+        // Carré
+        $aMoves[] = [$this->x + 1, $this->y];
+        $aMoves[] = [$this->x - 1, $this->y];
+        $aMoves[] = [$this->x, $this->y + 1];
+        $aMoves[] = [$this->x, $this->y - 1];
+
+        return $aMoves;
+    }
+
+    public function getAttacks(): array
+    {
+        $aMoves = [];
+
+        // Diag
+        $aMoves[] = [$this->x - 1, $this->y - 1];
+        $aMoves[] = [$this->x - 1, $this->y + 1];
+        $aMoves[] = [$this->x + 1, $this->y - 1];
+        $aMoves[] = [$this->x + 1, $this->y + 1];
+
+        // Carré
+        $aMoves[] = [$this->x + 1, $this->y];
+        $aMoves[] = [$this->x - 1, $this->y];
+        $aMoves[] = [$this->x, $this->y + 1];
+        $aMoves[] = [$this->x, $this->y - 1];
+
+        // Diag
+        $aMoves[] = [$this->x - 2, $this->y - 2];
+        $aMoves[] = [$this->x - 2, $this->y + 2];
+        $aMoves[] = [$this->x + 2, $this->y - 2];
+        $aMoves[] = [$this->x + 2, $this->y + 2];
+
+        // Carré
+        $aMoves[] = [$this->x + 2, $this->y];
+        $aMoves[] = [$this->x - 2, $this->y];
+        $aMoves[] = [$this->x, $this->y + 2];
+        $aMoves[] = [$this->x, $this->y - 2];
+
+        // Diag
+        $aMoves[] = [$this->x - 3, $this->y - 3];
+        $aMoves[] = [$this->x - 3, $this->y + 3];
+        $aMoves[] = [$this->x + 3, $this->y - 3];
+        $aMoves[] = [$this->x + 3, $this->y + 3];
+
+        // Carré
+        $aMoves[] = [$this->x + 3, $this->y];
+        $aMoves[] = [$this->x - 3, $this->y];
+        $aMoves[] = [$this->x, $this->y + 3];
+        $aMoves[] = [$this->x, $this->y - 3];
+
+        return $aMoves;
     }
 }

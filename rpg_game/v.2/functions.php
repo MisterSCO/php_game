@@ -7,8 +7,10 @@ function getColorClass(float $fRatio) : string
         $sClass = 'bg-success';
     } elseif ($fRatio > 35) {
         $sClass ='bg-warning';
-    } else {
+    } elseif ($fRatio > 0) {
         $sClass = 'bg-danger';
+    } elseif ($fRatio <= 0) {
+        $sClass = 'bg-dark';
     }
     return $sClass;
 }

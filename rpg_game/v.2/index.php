@@ -3,9 +3,7 @@ include('_bootstrap.php');
 // On récupère le jeu en session (si existant)
 $oGame = isset($_SESSION['game']) ? unserialize($_SESSION['game']) : null;
 // On récupère le joueur en session (si existant)
-$oPlayer = isset($_SESSION['player']) ? unserialize($_SESSION['player']) : null;
-
-var_dump($oGame->getMonsters());
+$oPlayer = $oGame ? $oGame->getPlayers()[0] : null;
 
 ?>
 <!DOCTYPE html>
@@ -29,7 +27,7 @@ var_dump($oGame->getMonsters());
 
     <div id="NewGame" class="btn btn-primary my-3">Nouvelle partie</div><br />
 
-    
+
     <div class="container">
         <div id="board">
             <?php if ($oGame) : ?>
@@ -52,7 +50,7 @@ var_dump($oGame->getMonsters());
 
         $(document).ready(function() {
             $(document).on('keydown', function(e) {
-                if ([32,37,38,39,40].includes(e.keyCode)) {
+                if ([32, 37, 38, 39, 40].includes(e.keyCode)) {
                     e.preventDefault();
                 }
             });
@@ -78,6 +76,10 @@ var_dump($oGame->getMonsters());
                     case 40: // Down
                         y++;
                         break;
+
+                    case 32: // space
+                        refreshBoard('attack');
+                        break;
                 }
 
                 if ([37, 38, 39, 40].includes(e.keyCode)) {
@@ -87,6 +89,8 @@ var_dump($oGame->getMonsters());
                         $cell.click(); // $cell.trigger('click')
                     }
                 }
+                
+
             });
 
 
@@ -108,7 +112,7 @@ var_dump($oGame->getMonsters());
 
                 refreshBoard('refresh');
 
-            }, 300000);
+            }, 3000);
 
             $('#NewGame').on('click', function() {
                 // AJAX - Requête GET (permet de mettre à jour une partie de la page)
