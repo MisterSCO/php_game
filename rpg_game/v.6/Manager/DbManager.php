@@ -6,7 +6,7 @@ class DbManager
     /** @var \Pdo */
     private static $pdo = null;
 
-    /** 
+    /**
      * @return \Pdo
      */
     public static function getDb()
